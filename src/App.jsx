@@ -1,76 +1,63 @@
-import React from "react";
-import { useState } from "react";
 import "./App.css";
-import UniversalInput from "./UniversalInput";
+import { UniversalInput } from "./UniversalInput";
+import { useLocalStorage } from "./hooks";
+import { useDebounce } from "./hooks";
 
 const App = () => {
-  const [firstValue, setFirstValue] = useState("");
-  const [secondValue, setSecondValue] = useState("");
-  const [thirdValue, setThirdValue] = useState("");
-  const [fourValue, setFourValue] = useState("");
-  const [fiveValue, setFiveValue] = useState("");
+  const [firstValue, setFirstValue] = useLocalStorage("first", "");
+  const [secondValue, setSecondValue] = useLocalStorage("second", "");
+  const [thirdValue, setThirdValue] = useLocalStorage("third", "");
+  const [fourthValue, setFourthValue] = useLocalStorage("fourth", "");
+  const [fifthValue, setFifthValue] = useLocalStorage("fifth", "");
+
+  const debouncedFirstValue = useDebounce(firstValue, 200);
+  const debouncedThirdValue = useDebounce(thirdValue, 200);
 
   return (
     <div className="main">
-      <h1 className="title">THIS IS NOT A TEST TASK</h1>
+      <h1 className="title">THIS IS TEST TASK</h1>
       <div className="inputItems">
         <UniversalInput
-          type="number"
-          disabled={false}
-          value={firstValue}
-          onChange={(e) => setFirstValue(e?.target?.value)}
+          type="numeric"
           placeholder="Number type"
-          style={{ width: "100%" }}
-          className="inputItem"
+          value={debouncedFirstValue}
+          onChange={(e) => setFirstValue(e.target.value)}
         />
         <UniversalInput
-          disabled={false}
-          value={secondValue}
-          onChange={(e) => setSecondValue(e?.target?.value)}
           placeholder="Text type"
-          style={{ width: "100%" }}
-          className="inputItem"
+          value={secondValue}
+          onChange={(e) => setSecondValue(e.target.value)}
         />
         <UniversalInput
-          multiline={true}
-          disabled={false}
-          value={thirdValue}
-          onChange={(e) => setThirdValue(e?.target?.value)}
+          type="textArea"
           placeholder="Text multiline type"
-          style={{ width: "100%" }}
-          className="inputItem"
+          value={debouncedThirdValue}
+          onChange={(e) => setThirdValue(e.target.value)}
         />
         <UniversalInput
-          disabled={false}
-          value={fourValue}
-          onChange={(e) => setFourValue(e?.target?.value)}
+          type="mask"
           mask={"111-111"}
-          placeholder="With mask"
-          style={{
-            width: "100%",
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "15px",
-          }}
-          className="inputItem"
+          value={fourthValue}
+          onChange={(e) => setFourthValue(e.target.value)}
         />
         <UniversalInput
-          disabled={false}
-          value={fiveValue}
-          onChange={(e) => setFiveValue(e?.target?.value)}
-          options={[
-            { value: "first element", label: "first element" },
-            { value: "second element", label: "second element" },
-            { value: "third element", label: "third element" },
-          ]}
-          placeholder="Another type"
-          style={{
-            width: "100%",
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "15px",
+          // readOnly
+          onEndEditing={(val) => {
+            console.log("Finished editing with value:", val);
           }}
-          className="inputItem"
+          type="select"
+          value={fifthValue}
+          onChange={(value) => setFifthValue(value)}
+          options={{
+            groupId: "firstGroup",
+            label: "First group",
+            items: [
+              { value: "first element", label: "first element" },
+              { value: "second element", label: "second element" },
+              { value: "third element", label: "third element" },
+            ],
+          }}
+          placeholder="Another type"
         />
       </div>
     </div>

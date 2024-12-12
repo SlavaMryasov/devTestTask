@@ -21,13 +21,12 @@
 }
 
 .inputItems {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 500px;
   border: 1px solid white;
   border-radius: 10px;
   padding: 20px;
 }
 
-.inputItem {
-  margin-top: 20px;
-  width: 100%;
-}
